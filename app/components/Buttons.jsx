@@ -21,6 +21,7 @@ export const BackButton = (props) => {
     >
       <Image 
         src="/chevron_left.svg"
+        alt=""
         className="fill-white"
         width={24}
         height={24}
