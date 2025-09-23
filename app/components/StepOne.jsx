@@ -1,21 +1,34 @@
-import Image from "next/image";
+'use client';
+
 import { InputTab } from "./InputTab";
 
-export const StepOne = () => {
+export const StepOne = (props) => {
+  const { state, inputOnchangeHandler } = props;
+  const fields = [ "firstName", "lastName", "userName" ];
+
   return (
-    <div>
-      <div className="w-104 flex flex-col place-content-center items-start text-[#202124] gap-2">
-        <Image className=""
-          src="/pinecone.svg"
-          width={60}
-          height={60}
-        ></Image>
-        <h1 className="text-[26px] font-semibold">Join Us! 😎</h1>
-        <p className="text[18px] text-[#8E8E8E]">Please provide all current information accurately.</p>
-      </div>
-      <div className="w-104 gap-3">
-        <InputTab></InputTab>
-      </div>
+    <div className="flex flex-col gap-3">
+      {
+        fields.map(field => {
+          let placeholder = "";
+          if(field === "firstName") placeholder = "First name";
+          else if(field === "lastName") placeholder = "Last name";
+          else if (field === "userName") placeholder = "User name";
+
+          console.log("placeholder: " + placeholder);
+
+          return (
+            <div className="w-104 gap-3" key={field}>
+              <InputTab
+                // key={field}
+                field={field}
+                placeholder={placeholder}
+                inputValue={state.field}
+                inputOnchangeHandler={(e) => inputOnchangeHandler(e, field)}></InputTab>
+            </div>
+          );
+        })
+      }
     </div>
   );
-}
+};
