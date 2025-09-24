@@ -3,7 +3,7 @@
 import { InputTab } from "./InputTab";
 
 export const StepPage = (props) => {
-  const { currentStepDatas, formOnSubmitHandler } = props;
+  const { currStepDatas, formOnSubmitHandler } = props;
 
   return (
     <form className="flex flex-col gap-3"
@@ -11,7 +11,7 @@ export const StepPage = (props) => {
       id="form2"
     >
       {
-        Object.keys(currentStepDatas).map(field => {
+        Object.keys(currStepDatas).map(field => {
           let type = "";
           if(field.toLowerCase().includes("date")) type="date";
           else if(field.toLowerCase().includes("number")) type="number";

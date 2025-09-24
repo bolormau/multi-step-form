@@ -29,21 +29,21 @@ export const Container = () => {
   console.log("current page fields: ");
   console.log(currStepDatas);
 
-  const currStepDataFields = Object.keys(currentStepDatas).map(field => field);
+  const currStepDataFields = Object.keys(currStepDatas).map(field => field);
 
   const validateData = (datas) => {
-    if(!datas.firstName) errors[0].firstName = "First name is required"; 
-    else errors[0].firstName = "";
+    // if(!datas.firstName) setStep({...step, [step.errors[step.currStep]]: "First name is required"});
+    // else errors[0].firstName = "";
 
-    if(!datas.email) errors[1].email = "Email is required"; 
-    else errors[1].email = "";
+    // if(!datas.email) step.errors[1].email = "Email is required"; 
+    // else errors[1].email = "";
 
     // if(!datas.dateOfBirth) errors.stepThree.dateOfBirth = "Date of birth is required"; 
     // else errors.stepThree.dateOfBirth = "";
 
-    if(errors === initErrors) return true;
+    if(step.errors === initErrors) return true;
     console.log("Errors: ");
-    console.log(errors);
+    console.log(step.errors);
   }
 
   const formOnSubmitHandler = (e) => {
@@ -58,7 +58,7 @@ export const Container = () => {
 
     // const currStepUpdatedDataValuesState2 = Object.fromEntries(stepDataKeys.map((stepDataKey, i) => [stepDataKey, stepDatas[i]]));
 
-    const updatedDatas = currStepDataFields.reduce((currentStepDatas, key, i) => {
+    const updatedDatas = currStepDataFields.reduce((currStepDatas, key, i) => {
       currStepDatas[key] = currStepUpdatedDataValues[i]; 
       return currStepDatas;
       }, {}
@@ -66,21 +66,28 @@ export const Container = () => {
 
     console.log("updated objects: ");
     console.log(updatedDatas);
-    if(validateData(currStepUpdatedDataValues)) setStep({...step, [step.datas[step.currStep]]: updatedDatas, [step.currStep]: (step.currStep + 1)});
+    if(validateData(currStepUpdatedDataValues) === true) {
+      setStep({currStep: (step.currStep + 1), ...step, [step.datas[step.currStep]]: updatedDatas});
+      console.log("curr step: ");
+      console.log(step.currStep);
+    }
     // else error;
   }
 
-  const buttonOnclickHandler = (isContinue) => {
-    if(isContinue) setStep({...step, [step.currStep]: (step.currStep + 1)});
-    else setStep({...step, [step.currStep]: (step.currStep - 1)});
-  }
+  // const buttonOnclickHandler = (isContinue) => {
+  //   if(isContinue) setStep({...step, [step.currStep]: (step.currStep + 1)});
+  //   else setStep({...step, [step.currStep]: (step.currStep - 1)});
+  // }
 
+  // TESTING 
+  console.log("Step: ");
+  console.log(step);
 
   return (
     <div className="w-120 h-[655px] flex flex-col place-content-between items-center bg-[#FFFFFF] rounded-[8px] p-8 gap-7">
       <div className="flex flex-col gap-7">
         <Header/>
-        <StepPage currentStepDatas={currentStepDatas} formOnSubmitHandler={formOnSubmitHandler}/>
+        <StepPage currStepDatas={currStepDatas} formOnSubmitHandler={formOnSubmitHandler}/>
       </div>
       <div className="w-104 flex gap-2">
         {
@@ -100,7 +107,17 @@ export const Container = () => {
 
 
 
+  // const stepMap = Object.keys(step).map((key, i) => {
+  //   if(key === "currStep") return key + ": " + step[key] + "\n";
+  //   else return ( step[key].map((field, i) => {
+  //     return (
+  //       Object.keys(field).map((fieldKey, i) => {
+  //         return fieldKey + ": " + field[fieldKey] + "\n";
+  //       }));
+  //   }));
+  // });
 
+  // console.log(stepMap);
 
 
 
