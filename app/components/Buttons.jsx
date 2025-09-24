@@ -1,13 +1,13 @@
 import Image from "next/image";
 
 export const ContinueButton = (props) => {
-  const { type="continue", continueOnclickHandler } = props;
+  const { type="continue", state, continueOnclickHandler } = props;
 
   return (
-    <button className="flex-1 bg-[#121316] text-[#FFFFFF] text-4 leading-6 rounded-[6px] py-2.5 px-3"
-      onClick={continueOnclickHandler}  
+    <button className="flex-1 bg-[#121316] text-[#FFFFFF] text-4 leading-6 rounded-[6px] py-2.5 px-3. gap-0.5"
+      onClick={continueOnclickHandler}
     >
-      {type}
+      {type}{state.step}
     </button>
   );
 }

@@ -2,32 +2,33 @@
 
 import { useReducer } from "react";
 import { Header } from "./Header"; 
-import { StepOne } from "./StepOne";
-import { StepTwo } from "./StepTwo";
-import { StepThree } from "./StepThree";
-import * as Buttons from "./Buttons";
+import { StepPage } from "./StepPage";
+import { Button } from "./Button";
 
 export const Container = () => {
-  const initState = {step: 0, error: "", firstName: "", lastName: "", userName: "", email: "", phoneNumber: 0};
-  const formReducer = (state, action) => {
+  const fieldsCollection = [["firstName", "lastName", "userName"], [ "email", "phoneNumber", "password", "confirmPassword" ], [ "dateOfBirth", "profileImage" ]];
+  const initStates = {step: 0, error: "", firstName: "", lastName: "", userName: "", email: "", phoneNumber: 0};
+  const formReducer = (states, action) => {
     switch (action.type) {
       case "UPDATE_FIELD": 
-        return {...state, [action.field]: action.value};
+        return {...states, [action.field]: action.value};
       case "NEXT_STEP":
-        return {...state, step: (action.step + 1)};
+          if(states.step < fieldsCollection.length - 1) return {...states, step: (states.step + 1)};
+          return states;
       case "PREV_STEP": 
-        return {...state, step: (action.step - 1)};
+        if(states.step > 0) return {...states, step: (states.step - 1)};
+          return states;
       case "ERROR": 
-        return {...state, [action.error]: action.errorMsg};
+        return {...states, [action.error]: action.errorMsg};
       case "RESET":
-        return initState;
+        return initStates;
       default: 
-        return state;
+        return states;
     };
   };
 
   // action is in dispatch
-  // state is in initState 
+  // states is in initstates 
 
   const inputOnchangeHandler = (e, field) => {
     dispatch({
@@ -37,15 +38,32 @@ export const Container = () => {
     })
   };
 
-  const [state, dispatch] = useReducer(formReducer, initState);
+  const buttonOnclickHandler = (isContinue, ) => {
+    if(isContinue) dispatch({type: "NEXT_STEP"});
+    else dispatch({type: "PREV_STEP"});
+  }
 
-  const CurrentStep = [StepOne, StepTwo, StepThree][state.step];
+  const [states, dispatch] = useReducer(formReducer, initStates);
+  
+  // TESTING
+  console.log("states: " + states);
+  Object.keys(states).map(key => {
+    console.log(key + ": " + states[key] + "\n");
+  })
+
   
   return (
-    <div className="w-120 h-[655px] flex flex-col bg-[#FFFFFF] rounded-[8px] p-8 gap-7">
-      <Header/>
-      <CurrentStep state={state} inputOnchangeHandler={inputOnchangeHandler}/>
-      {/* Buttons */}
+    <div className="w-120 h-[655px] flex flex-col place-content-between items-center bg-[#FFFFFF] rounded-[8px] p-8 gap-7">
+      <div className="flex flex-col gap-7">
+        <Header/>
+        <StepPage fields={fieldsCollection[states.step]} states={states} inputOnchangeHandler={inputOnchangeHandler}/>
+      </div>
+      <div className="w-104 flex gap-2">
+        {
+          states.step > 0 && <Button isContinue={false} currentStep={states.step + 1} buttonOnclickHandler={() => buttonOnclickHandler(false)}/>
+        }
+        <Button isContinue={true} currentStep={states.step + 1} totalStep={fieldsCollection.length}  buttonOnclickHandler={() => buttonOnclickHandler(true)}/>
+      </div>
     </div>
   );
 
@@ -53,7 +71,38 @@ export const Container = () => {
 
 
 
-  // const [currentStepIndex, setCurrentStepIndex] = useState(0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // {/* <CurrentStep states={states} inputOnchangeHandler={inputOnchangeHandler}/> */}
+  // const [currentStepIndex, setCurrentStepIndex] = usestates(0);
   // const steps = [StepOne, StepTwo, StepThree];
   // const CurrentStep = steps[currentStepIndex];
 
