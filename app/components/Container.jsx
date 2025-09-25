@@ -1,86 +1,133 @@
 'use client';
 
-import { useReducer, useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "./Header"; 
 import { StepPage } from "./StepPage";
 import { Button } from "./Button";
+import { initStates } from "../utils/constants";
+
+
+// step next back
+
 
 export const Container = () => {
-  const initDatas = [
-    { firstName: "", lastName: "", userName: "", },
-    { email: "", phoneNumber: "", password: "",  confirmPassword: "", },
-    { dateOfBirth: "", profileImage: "", },
-  ];
+  // INITIAL DATAS
 
-  const initErrors = [
-    {firstName: "", lastName: "", userName: "", },
-    { email: "", phoneNumber: "", password: "",  confirmPassword: "", },
-    { dateOfBirth: "", profileImage: "", },
-  ];
+  // const init = localStorage.setItem("init", 1);
 
-  const initStates = { currStep: 0, datas: initDatas, errors: initErrors };
+  // STATE
+  const [currStep, steCurrStep] = useState(0);
 
   const [step, setStep] = useState(initStates); 
 
-  const totalStep = Object.keys(initDatas).length;
-  console.log("total step: " + totalStep);
+  // USEFUL VARIABLES 
+  // TESTING
+  const totalStepCount = Object.keys(initDatas).length;
+  console.log("1. total step count: " + totalStepCount);
+  
+  const allKeysArr = [initDatas.flatMap(Object.keys)];
+    // above works because Object.keys is expecting parameter which should be an object and 
+    // our array map/flatMap running through every object in array, 
+    // so it gives object that needed in Object.keys automatically, bc that needed value is matching to what map gives it.
+    // flatMap => makes an flat array like combining(like spread) all mapped stuffs.
+  console.log("2. All keys' array: ");
+  console.log(allKeysArr);
+
+  console.log("3. All Step Datas: ");
+  console.log(step);
 
   const currStepDatas = step.datas[step.currStep];
-  console.log("current page fields: ");
+  console.log("4. Current Step Datas Only: ");
   console.log(currStepDatas);
 
-  const currStepDataFields = Object.keys(currStepDatas).map(field => field);
+  const currStepKeys = Object.keys(currStepDatas).map(field => field);
+  console.log("5. Current Step Keys Only: ");
+  console.log(currStepKeys);
 
-  const validateData = (datas) => {
-    // if(!datas.firstName) setStep({...step, [step.errors[step.currStep]]: "First name is required"});
-    // else errors[0].firstName = "";
 
-    // if(!datas.email) step.errors[1].email = "Email is required"; 
-    // else errors[1].email = "";
+  // CURRENT ERROR === INIT ERROR CHECKER
+  const errorComparer = (currErrors, initErrors) => {
+    if(currErrors.length !== initErrors.length) return false;
+    
+    return currErrors.every((currErrorObj, i) =>{ 
+      const initErrorObj = initErrors[i];
+      const currErrorsValues = Object.values(currErrorObj);
+      const initErrorsValues = Object.values(initErrorObj);
+      return currErrorsValues.every((currErrorsValue, j) => currErrorsValue === initErrorsValues[j]);
+    });
+  };
 
-    // if(!datas.dateOfBirth) errors.stepThree.dateOfBirth = "Date of birth is required"; 
-    // else errors.stepThree.dateOfBirth = "";
+  console.log("6. Curr error === initError: ");
+  console.log(errorComparer(step.errors, initErrors));
 
-    if(step.errors === initErrors) return true;
-    console.log("Errors: ");
-    console.log(step.errors);
-  }
 
+  // DATA VALIDATION CHECKER
+  // const validateData = (datas) => {
+  //   if(!datas.firstName) setStep({...step, (step.errors[step.currStep]): "First name is required"});
+  //   else errors[0].firstName = "";
+
+  //   if(!datas.email) step.errors[1].email = "Email is required"; 
+  //   else errors[1].email = "";
+
+  //   if(!datas.dateOfBirth) errors.stepThree.dateOfBirth = "Date of birth is required"; 
+  //   else errors.stepThree.dateOfBirth = "";
+
+  //   if(errorComparer(step.errors, initErrors)) return true;
+  // }
+
+
+  // FORM ONSUBMIT HANDLER (ERROR OR CONTINUE)
+  console.table(step.errors,' current errors');
+  
   const formOnSubmitHandler = (e) => {
+    console.log("working onsubmit handler: ");
     e.preventDefault();
     console.log("working");
 
     const formDatas = new FormData(e.target);
     console.log("Testing: ");
+    
+    console.log(formDatas.get('firstName'), 'firstname')
+    const newErros = [...step.errors];
+    newErros[step.currStep].firstName = 'firstname is required';
+    setStep({ ...step, errors: newErros});
 
-    const currStepUpdatedDataValues = currStepDataFields.map(currStepDataField => formDatas.get(currStepDataField));
-    console.log(currStepUpdatedDataValues);
+    // const currStepUpdatedValues = currStepKeys.map(currStepDataField => formDatas.get(currStepDataField));
+    // console.log(currStepUpdatedValues);
 
-    // const currStepUpdatedDataValuesState2 = Object.fromEntries(stepDataKeys.map((stepDataKey, i) => [stepDataKey, stepDatas[i]]));
+    // // const currStepUpdatedValuesState2 = Object.fromEntries(stepDataKeys.map((stepDataKey, i) => [stepDataKey, stepDatas[i]]));
 
-    const updatedDatas = currStepDataFields.reduce((currStepDatas, key, i) => {
-      currStepDatas[key] = currStepUpdatedDataValues[i]; 
-      return currStepDatas;
-      }, {}
-    );
+    // // reduce for updating all data by updated curr step's data.
+    // const allStepUpdatesValues = currStepKeys.reduce((currStepDatas, key, i) => {
+    //   currStepDatas[key] = currStepUpdatedValues[i]; 
+    //   return currStepDatas;
+    //   }, {}
+    // );
 
-    console.log("updated objects: ");
-    console.log(updatedDatas);
-    if(validateData(currStepUpdatedDataValues) === true) {
-      setStep({currStep: (step.currStep + 1), ...step, [step.datas[step.currStep]]: updatedDatas});
-      console.log("curr step: ");
-      console.log(step.currStep);
-    }
-    // else error;
+    // console.log("Updated steps: ");
+    // console.log(allStepUpdatesValues);
+
+
+    // if(errorComparer(step.errors, initErrors)) {
+    //   setStep({...step, currStep: (step.currStep + 1), });
+    //   // console.log("updated step:");
+    //   // console.log({...step, currStep: (step.currStep + 1), });
+    //   // datas[step.currStep]: allStepUpdatesValues
+    // }
+    // else console.log("error");
   }
 
-  // const buttonOnclickHandler = (isContinue) => {
-  //   if(isContinue) setStep({...step, [step.currStep]: (step.currStep + 1)});
-  //   else setStep({...step, [step.currStep]: (step.currStep - 1)});
-  // }
+  const backOnClickHandler = () => {
+    console.log("back working");
+    setStep({...step, currStep: (step.currStep - 1) });
+  };
 
-  // TESTING 
-  console.log("Step: ");
+  console.log("Current All Errors: ");
+  console.log(step.errors);
+  console.log("Init Errors: ");
+  console.log(initErrors);
+
+  console.log("7. All Step Datas: ");
   console.log(step);
 
   return (
@@ -91,12 +138,13 @@ export const Container = () => {
       </div>
       <div className="w-104 flex gap-2">
         {
-          step.currStep > 0 && <Button isContinue={false} currStep={step.currStep + 1} buttonOnclickHandler={() => buttonOnclickHandler(false)}/>
+          step.currStep > 0 && <Button isContinue={false} currStep={step.currStep + 1} backOnClickHandler={() => backOnClickHandler}/>
         }
-        <Button isContinue={true} currStep={step.currStep + 1} totalStep={totalStep} buttonOnclickHandler={() => buttonOnclickHandler(true)}/>
+        <Button isContinue={true} currStep={step.currStep + 1} totalStepCount={totalStepCount}/>
       </div>
     </div>
   );
+};
 
 
 
@@ -104,6 +152,39 @@ export const Container = () => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // const buttonOnclickHandler = (isContinue) => {
+  //   if(isContinue) setStep({...step, [step.currStep]: (step.currStep + 1)});
+  //   else setStep({...step, [step.currStep]: (step.currStep - 1)});
+  // }
 
 
 
@@ -227,4 +308,3 @@ export const Container = () => {
   //     }
   //   </div>
   // );
-}

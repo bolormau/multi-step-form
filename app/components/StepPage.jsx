@@ -8,7 +8,7 @@ export const StepPage = (props) => {
   return (
     <form className="flex flex-col gap-3"
       onSubmit={formOnSubmitHandler}
-      id="form2"
+      id="form"
     >
       {
         Object.keys(currStepDatas).map(field => {
@@ -24,9 +24,10 @@ export const StepPage = (props) => {
               <InputTab
                 type={type}
                 field={field}
+                
                 placeholder={field.replace(/([A-Z])/g, " $1").toLowerCase().replace(/^./, (c) => c.toUpperCase())}
                 // inputValue={states.field}
-                formOnSubmitHandler={(e) => {formOnSubmitHandler(e, field, )}}
+                formOnSubmitHandler={(e) => formOnSubmitHandler(e)}
               />
             </div>);
         })

@@ -7,7 +7,6 @@ export const Button = (props) => {
     <button className="flex-1 bg-[#121316] text-[#FFFFFF] text-4 leading-6 rounded-[6px] py-2.5 px-3"
       type="submit"
       form="form"
-      // onClick={buttonOnclickHandler}  
     >
       Continue {currStep}/{totalStepCount} 
     </button>
