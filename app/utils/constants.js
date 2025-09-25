@@ -8,4 +8,4 @@ export const initErrors = {
   confirmPassword: "", 
   dateOfBirth: "", 
   profileImage: "", 
-}
+};

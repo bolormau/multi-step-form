@@ -1,7 +1,8 @@
 import { InputTab1 } from "./InputTab1"
 
 export const StepPage1 = (props) => {
-const { formOnSubmitHandler } = props;
+const { fields, formOnSubmitHandler } = props;
+
 
 return(
     <form className="flex flex-col gap-3"
