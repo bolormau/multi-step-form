@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { Header } from "./Header"; 
-import { StepPage } from "./StepPage";
-import { Button } from "./Button";
+import { StepPage } from "./StepPage2";
+import { Button } from "./Button2";
 import { initStates } from "../utils/constants";
 
 

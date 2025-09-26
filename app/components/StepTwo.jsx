@@ -1,6 +1,6 @@
 'use client';
 
-import { InputTab } from "./InputTab";
+import { InputTab } from "./InputTab2";
 
 export const StepTwo = (props) => {
   const { states, inputOnchangeHandler } = props;

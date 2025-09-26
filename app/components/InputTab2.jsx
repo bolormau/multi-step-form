@@ -1,5 +1,5 @@
 export const InputTab = (props) => {
-  const { field, type="text", placeholder, inputValue } = props;
+  const { field, type="text", placeholder, inputValue, inputOnchangeHandler, imageInputOnchangeHandler} = props;
 
   if(type === "file") return (
     <div className="w-full flex flex-col place-content-center items-start gap-2">
@@ -15,6 +15,7 @@ export const InputTab = (props) => {
           type={type}
           accept="image/*"
           className="w-full min-h-20 h-45 flex flex-col place-content-center items-center bg-[#7F7F800D] rounded-md p-3 text-[#8B8E95] text-4 leading-5 focus:outline-none"
+          // onChange={imageInputOnchangeHandler}
         />
         {/* <p className="text-black">jhgf</p> */}
       </div>
@@ -34,9 +35,11 @@ export const InputTab = (props) => {
         name={field}
         id={field} 
         type={type} 
+        // id="id" change
         className="w-full border-[1px] border-[#CBD5E1] rounded-[8px] p-3 text-[#8B8E95] text-4 leading-5 focus:border-[#0CA5E9] focus:outline-none"
         placeholder={placeholder}
         value={inputValue}
+        // onChange={inputOnchangeHandler}
       />
       
     </div>
