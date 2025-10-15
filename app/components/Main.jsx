@@ -122,7 +122,7 @@ export const Main = () => {
           formData={formData}
           errors={errors}
         />
-        <div className="w-104 flex gap-2">
+        <div className="w-104 flex gap-2">for test testetetetettstststststss
           { step > 0 && <Button isContinue={false} prevStep={prevStep}/> }
           <Button isContinue={true} currStep={step + 1} totalSteps={totalSteps}/>
         </div>
